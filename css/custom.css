@@ -1,0 +1,4 @@
+/* 注意引入的css是全局的 */
+* {
+    user-select: all
+}
