@@ -32,6 +32,23 @@ chrome.runtime.onInstalled.addListener(function () {
     },
   });
 
+  // "permissions": ["notifications"]
+  chrome.contextMenus.create({
+    title: "测试通知",
+    contexts: ["page"],
+    onclick: function (params) {
+      chrome.notifications.create(null, {
+        type: 'basic',
+        iconUrl: '../img/icon.png',
+        title: '这是标题',
+        message: '您刚才点击了自定义右键菜单！'
+      });
+    },
+  });
+
+  
+
+
   // omnibox 演示
   chrome.omnibox.onInputChanged.addListener((text, suggest) => {
     console.log("inputChanged: " + text);

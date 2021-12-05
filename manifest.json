@@ -26,7 +26,8 @@
     "permissions": [
         "declarativeContent",
         "contextMenus",
-        "tabs"
+        "tabs",
+        "notifications"
     ],
     "web_accessible_resources": ["js/inject.js"],
     "homepage_url": "https://www.baidu.com",

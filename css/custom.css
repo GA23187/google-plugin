@@ -1,5 +1,4 @@
 /* 注意引入的css是全局的 */
-pre,
-pre code {
-    user-select: all
+* {
+    user-select: text!important
 }
