@@ -1,0 +1,17 @@
+/* 注意引入的css是全局的 */
+* {
+    user-select: text!important
+}
+/* csdn关注博客查看 */
+.hide-article-box {
+    display: none;
+}
+.article_content {
+    height: auto!important;
+}
+.theme-default-content.pay-content .content__default>:nth-child(n+48) {
+    display: block!important;
+}
+.theme-default-content.pay-content .content-lock {
+    display: none!important;
+}

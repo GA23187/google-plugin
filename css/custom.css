@@ -1,4 +1,31 @@
 /* 注意引入的css是全局的 */
 * {
-    user-select: text!important
+  user-select: text !important;
+}
+/* csdn关注博客查看 */
+.hide-article-box {
+  display: none;
+}
+.article_content {
+  height: auto !important;
+}
+.theme-default-content.pay-content .content__default > :nth-child(n + 48) {
+  display: block !important;
+}
+.theme-default-content.pay-content .content-lock {
+  display: none !important;
+}
+/* 崔学社播放全屏 */
+.content-detail_page_layout {
+  max-width: 100% !important;
+}
+.video_out_wrapper {
+  max-width: 100% !important;
+}
+/* 珠峰 */
+#loginModal {
+  display: none !important;
+}
+.modal-backdrop {
+  display: none;
 }

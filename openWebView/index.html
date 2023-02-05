@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>-- openapi token + app_key</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    url:
+    <input id="plugin_url" type="text" name="token" width="100" value="" />
+    button:
+    <input id="plugin_app_key" type="text" name="app_key" />
+    <button id="save">保存</button>
+    <button id="clear">清除</button>
+    <!-- 这里需要注意,在插件的这个html中,不能直接写js脚本,需要引入外部js -->
+    <script src="js/save.js"></script>
+    <script src="js/get.js"></script>
+  </body>
+</html>
