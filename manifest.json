@@ -41,7 +41,7 @@
     "https://*/*"
   ],
   "web_accessible_resources": ["js/inject.js"],
-  "homepage_url": "https://www.baidu.com",
+  "homepage_url": "https://github.com/GA23187/google-plugin",
   "options_page": "options.html",
   "options_ui": {
     "page": "options.html",

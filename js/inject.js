@@ -1,5 +1,10 @@
 console.log('inject 注入')
 document.oncontextmenu = function () {
+  try {
+    console.log('inject可以访问到js变量(csdn)', articleId)
+  } catch {
+    console.log('inject可以访问到js变量(csdn) 异常')
+  }
   return true
 }
 document.onkeydown = function () {
