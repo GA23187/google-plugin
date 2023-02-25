@@ -37,6 +37,8 @@
     "tabs",
     "notifications",
     "cookies",
+    "webRequest",
+    "webRequestBlocking",
     "http://*/*",
     "https://*/*"
   ],

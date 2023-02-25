@@ -951,6 +951,87 @@ Refused to execute JavaScript URL because it violates the following Content Secu
 
 
 
+# 拦截请求
+
+## 方式1
+
+background.js中chrome.webRequest系列api，需要先在manifest中声明权限。
+
+```js
+// web请求监听，最后一个参数表示阻塞式，需单独声明权限：webRequestBlocking
+chrome.webRequest.onBeforeRequest.addListener(details => {
+	// cancel 表示取消本次请求
+	if(!showImage && details.type == 'image') return {cancel: true};
+	// 简单的音视频检测
+	// 大部分网站视频的type并不是media，且视频做了防下载处理，所以这里仅仅是为了演示效果，无实际意义
+	if(details.type == 'media') {
+		chrome.notifications.create(null, {
+			type: 'basic',
+			iconUrl: 'img/icon.png',
+			title: '检测到音视频',
+			message: '音视频地址：' + details.url,
+		});
+	}
+}, {urls: ["<all_urls>"]}, ["blocking"]);
+```
+
+chrome.webRequest.onCompleted 成功处理请求时触发。该方式无法拿到返回的响应正文，常见用法为使用onBeforeRequest在请求发生前进行拦截重定向等操作
+
+## 方式2
+
+evtools对请求拦截，使用chrome.devtools.network系列api中的onRequestFinished，对请求结束事件进行监听，获取响应正文。其中获取到的content即为请求返回的内容。
+
+此方法最大的弊端就是：需要打开开发者工具，chrome.devtools的api都是属于devtools的，对于用户而言，明显该方式不够友好
+
+```js
+function handleRequestFinished(request) {
+    request.getContent(function(content, mimeType) {
+        chrome.runtime.sendMessage(chrome.runtime.id, {
+            fromDevTools: 'request',
+            tabId: chrome.devtools.inspectedWindow.tabId,
+            content: content
+        });
+    });
+}
+
+chrome.devtools.network.onRequestFinished.addListener(handleRequestFinished);
+```
+
+## 方式3（目前找到的最合适的方式）
+
+通过content-scripts将injected.js注入脚本，在injected.js中对原生的XMLHttpRequest及fetch对象做扩展来实现对请求和响应的捕获。在获取到content内容之后，通window.postMessage将内容发送到content.js中
+
+```js
+ (function(xhr) {
+     var XHR = XMLHttpRequest.prototype;
+
+     var send = XHR.send ;
+
+     XHR.send = function(postData) {
+         this.addEventListener('load', function() {
+            var  myUrl = this._url ? this._url.toLowerCase() : this._url;
+             if(myUrl)  {
+                if(this.responseType != 'blob' && this.responseText )  {
+                    try {
+                        var text = this.responseText;  
+                        // 发送消息到content.js
+                        window.postMessage({type: "inject_message_type", message:JSON.parse(text)})
+                        console.log ('注入脚本发送获取list: ', JSON.parse(text));    
+                    } catch (err)  {
+                    }
+                }
+
+             }
+         });
+         return send.apply(this, arguments);
+     };
+ })(XMLHttpRequest);
+```
+
+- [chrome插件拦截请求的几种方式](https://juejin.cn/post/7168443487380045854)
+- [Chrome插件网络请求拦截？](https://segmentfault.com/q/1010000042956707)
+- [chrome插件：拦截ajax请求并修改返回结果](https://juejin.cn/post/6844903793033740296)
+
 # 获取cookie
 
 ```json

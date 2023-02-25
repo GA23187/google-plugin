@@ -22,6 +22,7 @@ chrome.runtime.onInstalled.addListener(function () {
     ])
   })
 
+  // 右键菜单
   //"permissions": ["contextMenus"， "tabs"]
   chrome.contextMenus.create({
     title: '使用度娘搜索：%s', // %s表示选中的文字
@@ -36,6 +37,7 @@ chrome.runtime.onInstalled.addListener(function () {
     },
   })
 
+  // 通知
   // "permissions": ["notifications"]
   chrome.contextMenus.create({
     title: '测试通知',
@@ -74,7 +76,6 @@ chrome.runtime.onInstalled.addListener(function () {
       ])
     }
   })
-
   // 当用户接收关键字建议时触发
   chrome.omnibox.onInputEntered.addListener((text) => {
     console.log('inputEntered: ' + text)
@@ -105,6 +106,21 @@ chrome.runtime.onInstalled.addListener(function () {
       chrome.tabs.update(tabId, { url: url })
     })
   }
+
+  // 请求拦截
+  // "permissions": ["webRequest","webRequestBlocking"]
+  chrome.webRequest.onBeforeRequest.addListener(
+    (details) => {
+      // cancel 表示取消本次请求
+      if (details.url.includes('https://googleads.g.doubleclick.net')) {
+        return {
+          cancel: true,
+        }
+      }
+    },
+    { urls: ['<all_urls>'] },
+    ['blocking']
+  )
 })
 
 function background_test() {
